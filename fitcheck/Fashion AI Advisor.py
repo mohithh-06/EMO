@@ -438,14 +438,16 @@ if active_path and os.path.exists(active_path):
         print(f"[HF Blueprint note]: {e}")
 
 else:
-    # Empty State Guidance
+    # Empty State Guidance (Clean White & Lavender Palette)
     st.markdown("""
-    <div style="text-align: center; padding: 4.5rem 1.5rem; color: #94a3b8; background: rgba(18, 22, 36, 0.5); border-radius: 20px; border: 1px dashed rgba(255,255,255,0.12); margin-top: 2rem;">
-        <div style="font-size: 3.5rem; margin-bottom: 0.8rem;">✨</div>
-        <h3 style="color: #f8fafc; margin-bottom: 0.6rem; font-family: 'Cinzel', serif;">Awaiting Sartorial Canvas</h3>
-        <p style="max-width: 520px; margin: 0 auto; font-size: 1.02rem; line-height: 1.7; color: #94a3b8;">
-            Select any look from the <strong>Runway Look Archive</strong> in the left sidebar to audit immediately,
-            or upload a high-resolution photo to run multimodal deep learning critique.
+    <div style="text-align: center; padding: 4rem 1.8rem; background: #ffffff; border-radius: 24px; border: 2px dashed #ddd6fe; box-shadow: 0 4px 20px rgba(139, 92, 246, 0.08); margin-top: 2rem;">
+        <div style="font-size: 3.5rem; margin-bottom: 0.8rem; line-height: 1;">✨</div>
+        <h3 style="color: #1e1b4b; margin-bottom: 0.6rem; font-family: 'Playfair Display', Georgia, serif; font-size: 2rem; font-weight: 700;">Awaiting Sartorial Canvas</h3>
+        <p style="max-width: 540px; margin: 0 auto; font-size: 1.05rem; line-height: 1.7; color: #64748b;">
+            Select any look from the <strong style="color: #6d28d9;">Runway Look Archive</strong> in the left sidebar to audit immediately,
+            or upload a high-resolution photo in the tabs above to run multimodal deep learning critique.
         </p>
     </div>
     """, unsafe_allow_html=True)
+
+

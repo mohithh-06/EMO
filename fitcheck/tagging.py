@@ -10,12 +10,23 @@ from typing import Dict, Any, List
 from PIL import Image
 import imagehash
 
+import sys
+from pathlib import Path
+
+# Add fitcheck directory and repository root to sys.path
+current_dir = Path(__file__).resolve().parent
+repo_root = current_dir.parent
+for p in [str(current_dir), str(repo_root)]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
+
 try:
     from color_engine import extract_dominant_colors
     from vision_engine import zero_shot_classify, GENDER_PROMPTS, FORMALITY_PROMPTS, TEXTURE_PROMPTS
 except ImportError:
     from fitcheck.color_engine import extract_dominant_colors
     from fitcheck.vision_engine import zero_shot_classify, GENDER_PROMPTS, FORMALITY_PROMPTS, TEXTURE_PROMPTS
+
 
 
 CLOSET_ITEM_PROMPTS = [

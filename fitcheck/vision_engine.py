@@ -317,7 +317,50 @@ def unified_multimodal_classification(image: Image.Image) -> Dict[str, List[Dict
         }
 
 
+def zero_shot_classify(
+    image: Image.Image,
+    candidate_prompts: List[Any],
+    top_k: int = 1
+) -> List[Dict[str, Any]]:
+    """
+    Zero-shot image classification helper for arbitrary prompt sets.
+    Accepts candidate_prompts as list of (label, prompt_text) tuples or simple label strings.
+    """
+    try:
+        model, processor = load_clip_model()
+        device = get_device()
+        img_rgb = image.convert("RGB")
+
+        # Normalize candidates
+        labels = []
+        texts = []
+        for c in candidate_prompts:
+            if isinstance(c, (list, tuple)):
+                labels.append(c[0])
+                texts.append(f"a photo of {c[1]}")
+            else:
+                labels.append(str(c))
+                texts.append(f"a photo of {c}")
+
+        inputs = processor(text=texts, images=img_rgb, return_tensors="pt", padding=True).to(device)
+        with torch.no_grad():
+            outputs = model(**inputs)
+            logits = outputs.logits_per_image[0]
+            probs = torch.softmax(logits, dim=-1).cpu().numpy()
+
+        ranked = np.argsort(probs)[::-1]
+        return [
+            {"label": labels[idx], "confidence": round(float(probs[idx]) * 100.0, 1)}
+            for idx in ranked[:top_k]
+        ]
+    except Exception as e:
+        print(f"[emo VisionEngine] zero_shot_classify fallback: {e}")
+        default_label = candidate_prompts[0][0] if isinstance(candidate_prompts[0], (list, tuple)) else str(candidate_prompts[0])
+        return [{"label": default_label, "confidence": 70.0}]
+
+
 def analyze_spatial_proportions(image: Image.Image) -> Dict[str, Any]:
+
     """
     Analyze vertical thirds of the outfit to calculate spatial balance and line flow.
     """

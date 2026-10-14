@@ -8,6 +8,15 @@ import os
 from typing import Dict, Any, Optional
 from PIL import Image
 
+import sys
+from pathlib import Path
+
+current_dir = Path(__file__).resolve().parent
+repo_root = current_dir.parent
+for p in [str(current_dir), str(repo_root)]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
+
 try:
     from color_engine import extract_dominant_colors, evaluate_palette_harmony
     from vision_engine import analyze_outfit_deep_vision
@@ -16,6 +25,7 @@ except ImportError:
     from fitcheck.color_engine import extract_dominant_colors, evaluate_palette_harmony
     from fitcheck.vision_engine import analyze_outfit_deep_vision
     from fitcheck.critique_generator import generate_full_critique_package
+
 
 
 def analyze_outfit_pipeline(image_input) -> Dict[str, Any]:

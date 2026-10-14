@@ -33,8 +33,8 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
     .stApp {
-        background: radial-gradient(circle at 50% -15%, #181c2e 0%, #0a0c14 45%, #040508 100%);
-        color: #f1f5f9;
+        background: #ffffff !important;
+        color: #0f172a;
         font-family: 'Plus Jakarta Sans', sans-serif;
     }
     h1, h2, h3, h4 { font-family: 'Cinzel', serif !important; }
@@ -43,7 +43,7 @@ st.markdown("""
         position: relative;
         text-align: center;
         padding: 2.8rem 2rem 2rem 2rem;
-        background: linear-gradient(180deg, rgba(28, 33, 54, 0.75) 0%, rgba(12, 14, 24, 0.85) 100%);
+        background: linear-gradient(135deg, #ffffff 0%, #f5f3ff 50%, #f0f9ff 100%); border: 1px solid #e0e7ff;
         border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 24px;
         margin-bottom: 2.5rem;
@@ -402,7 +402,7 @@ with tab_hf:
                     st.markdown(f"""
                     <div style="background: rgba(18, 22, 38, 0.9); border: 1px solid rgba(129, 140, 248, 0.25); border-radius: 14px; padding: 1.4rem; margin-bottom: 1rem;">
                         <div style="color: #818cf8; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.4rem;">Client Profile & Context</div>
-                        <p style="color: #f1f5f9; font-size: 0.98rem; font-style: italic; margin-bottom: 1rem;">"{rec['instruction']}"</p>
+                        <p style="color: #0f172a; font-size: 0.98rem; font-style: italic; margin-bottom: 1rem;">"{rec['instruction']}"</p>
                         <div style="color: #f472b6; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.4rem;">Curated Outfit Execution</div>
                         <div style="color: #cbd5e1; font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; white-space: pre-wrap; line-height: 1.6; background: rgba(0,0,0,0.35); padding: 1rem; border-radius: 10px;">{rec['output']}</div>
                     </div>

@@ -1,7 +1,7 @@
 """
 emo — Design System Tokens & Shared UI Components.
-Art-directed design system establishing semantic color tokens, typography,
-accessible component states, and trustworthy layout architecture.
+Art-directed design system featuring clean crisp White primary surfaces,
+Lavender / Muted Violet accents, Light Sky Blue structures, and Sage / Light Green verified badges.
 """
 
 from typing import Dict, Any, List, Optional
@@ -17,65 +17,67 @@ DESIGN_TOKENS_CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-    /* Surface and Background Scale */
-    --emo-bg-base: #060911;
-    --emo-bg-subtle: #0d121f;
-    --emo-surface-1: rgba(18, 24, 38, 0.85);
-    --emo-surface-2: rgba(26, 34, 53, 0.90);
-    --emo-surface-elevated: #1a2235;
-    --emo-border-subtle: rgba(255, 255, 255, 0.08);
-    --emo-border-strong: rgba(255, 255, 255, 0.16);
-    --emo-border-accent: rgba(99, 102, 241, 0.40);
+    /* Palette: Pure White & Warm Off-White Surfaces */
+    --emo-bg-base: #ffffff;
+    --emo-bg-subtle: #f8fafc;
+    --emo-surface-1: #ffffff;
+    --emo-surface-2: #f5f3ff;          /* Light Lavender */
+    --emo-surface-elevated: #ffffff;
+    --emo-border-subtle: #e2e8f0;
+    --emo-border-strong: #cbd5e1;
+    --emo-border-accent: #c4b5fd;       /* Soft Lavender Border */
 
-    /* Text & Contrast Hierarchy (WCAG 2.2 AA compliant) */
-    --emo-text-primary: #f8fafc;       /* 17.5:1 on base */
-    --emo-text-secondary: #94a3b8;     /* 6.8:1 on base */
-    --emo-text-muted: #64748b;         /* 4.5:1 on surface-elevated */
-    --emo-text-inverse: #0f172a;
+    /* Typography & Contrast (WCAG 2.2 AA compliant: > 10:1 on white) */
+    --emo-text-primary: #0f172a;       /* Deep Slate / Midnight Navy */
+    --emo-text-secondary: #475569;     /* Slate 600 */
+    --emo-text-muted: #64748b;         /* Slate 500 */
+    --emo-text-inverse: #ffffff;
 
-    /* Brand Accents */
-    --emo-brand-primary: #6366f1;      /* Indigo / Electric Violet */
-    --emo-brand-primary-hover: #4f46e5;
-    --emo-brand-lavender: #a5b4fc;     /* Soft editorial accent */
-    --emo-brand-gold: #fbbf24;         /* Gold accent */
+    /* Palette Accents */
+    --emo-brand-lavender: #8b5cf6;     /* Vibrant Lavender / Violet */
+    --emo-brand-lavender-light: #ede9fe; /* Soft Lavender Tint */
+    --emo-brand-blue: #0284c7;         /* Light Blue / Sky Blue */
+    --emo-brand-blue-light: #e0f2fe;   /* Soft Blue Tint */
+    --emo-brand-green: #059669;        /* Sage / Light Emerald */
+    --emo-brand-green-light: #d1fae5;  /* Soft Green Tint */
 
-    /* Semantic Feedback Tokens */
-    --emo-status-success: #10b981;     /* Emerald 500 */
-    --emo-status-success-bg: rgba(16, 185, 129, 0.10);
-    --emo-status-warning: #f59e0b;     /* Amber 500 */
-    --emo-status-warning-bg: rgba(245, 158, 11, 0.10);
-    --emo-status-error: #ef4444;       /* Rose 500 */
-    --emo-status-error-bg: rgba(239, 68, 68, 0.10);
-    --emo-status-info: #3b82f6;        /* Blue 500 */
-    --emo-status-info-bg: rgba(59, 130, 246, 0.10);
-
-    /* Radii & Elevation */
+    /* Radii & Shadows */
     --emo-radius-sm: 8px;
     --emo-radius-md: 14px;
     --emo-radius-lg: 20px;
     --emo-radius-xl: 28px;
-    --emo-shadow-soft: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    --emo-shadow-elevated: 0 20px 45px -12px rgba(0, 0, 0, 0.7);
+    --emo-shadow-soft: 0 4px 20px -2px rgba(100, 116, 139, 0.12);
+    --emo-shadow-elevated: 0 16px 40px -6px rgba(100, 116, 139, 0.18);
 }
 
-/* Base Body Styling */
+/* Global Application Styling */
 .stApp {
-    background: radial-gradient(circle at 50% -20%, #171d33 0%, #0a0d17 50%, #05070d 100%);
-    color: var(--emo-text-primary);
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(180deg, #fbfaff 0%, #ffffff 40%, #f0fdf4 100%) !important;
+    color: var(--emo-text-primary) !important;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
     letter-spacing: -0.01em;
 }
 
+/* Sidebar Custom Palette */
+[data-testid="stSidebar"] {
+    background: #f8fafc !important;
+    border-right: 1px solid var(--emo-border-subtle) !important;
+}
+[data-testid="stSidebar"] * {
+    color: #1e293b !important;
+}
+
 /* Editorial Typography */
-h1, h2, h3 {
+h1, h2, h3, h4 {
     font-family: 'Playfair Display', Georgia, serif !important;
+    color: #0f172a !important;
     letter-spacing: -0.02em;
     font-weight: 700;
 }
 
 /* Accessibility Focus Ring */
 button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-    outline: 2px solid var(--emo-brand-primary) !important;
+    outline: 2px solid var(--emo-brand-lavender) !important;
     outline-offset: 2px !important;
 }
 
@@ -85,14 +87,14 @@ div.stButton > button {
     border-radius: var(--emo-radius-md) !important;
     font-weight: 700 !important;
     font-size: 0.94rem !important;
-    letter-spacing: 0.04em !important;
+    letter-spacing: 0.02em !important;
     padding: 0.75rem 1.6rem !important;
     min-height: 48px !important;
     width: 100% !important;
-    border: 1px solid rgba(255, 255, 255, 0.16) !important;
-    background: linear-gradient(135deg, rgba(30, 38, 64, 0.95) 0%, rgba(18, 22, 38, 0.98) 100%) !important;
-    color: #ffffff !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid #c4b5fd !important;
+    background: linear-gradient(135deg, #ffffff 0%, #f5f3ff 100%) !important;
+    color: #5b21b6 !important;
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.12) !important;
     transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
     cursor: pointer !important;
     text-align: center !important;
@@ -103,66 +105,52 @@ div.stButton > button {
     overflow: hidden !important;
 }
 
-div.stButton > button::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%; width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
-    transition: left 0.5s ease;
-}
-
 div.stButton > button:hover {
-    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #ec4899 100%) !important;
-    border-color: rgba(165, 180, 252, 0.6) !important;
+    background: linear-gradient(135deg, #7c3aed 0%, #0284c7 100%) !important;
+    border-color: #7c3aed !important;
     color: #ffffff !important;
     transform: translateY(-2px) scale(1.01) !important;
-    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3) !important;
-}
-
-div.stButton > button:hover::before {
-    left: 100%;
+    box-shadow: 0 10px 24px rgba(124, 58, 237, 0.28) !important;
 }
 
 div.stButton > button:active {
     transform: translateY(0) scale(0.99) !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
-}
-
-div.stButton > button:focus-visible {
-    outline: 2px solid var(--emo-brand-lavender) !important;
-    outline-offset: 3px !important;
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.2) !important;
 }
 
 /* Sidebar Custom Responsive Button Grid */
 [data-testid="stSidebar"] div.stButton > button {
-    font-size: 0.85rem !important;
+    font-size: 0.86rem !important;
     padding: 0.6rem 0.9rem !important;
     min-height: 42px !important;
     border-radius: var(--emo-radius-sm) !important;
-    background: rgba(22, 28, 48, 0.85) !important;
+    background: #ffffff !important;
+    color: #334155 !important;
+    border: 1px solid #e2e8f0 !important;
 }
 
 [data-testid="stSidebar"] div.stButton > button:hover {
-    background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%) !important;
-    box-shadow: 0 6px 18px rgba(99, 102, 241, 0.4) !important;
+    background: linear-gradient(135deg, #ede9fe 0%, #e0f2fe 100%) !important;
+    color: #4338ca !important;
+    border-color: #c7d2fe !important;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.18) !important;
 }
 
 /* Responsive Tab Bar Polish */
 .stTabs [data-baseweb="tab-list"] {
-    gap: 10px;
-    background: rgba(13, 18, 31, 0.85);
-    padding: 8px;
+    gap: 8px;
+    background: #f1f5f9;
+    padding: 6px;
     border-radius: var(--emo-radius-lg);
-    border: 1px solid var(--emo-border-strong);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--emo-border-subtle);
     display: flex;
     flex-wrap: wrap;
 }
 .stTabs [data-baseweb="tab"] {
     border-radius: var(--emo-radius-md);
-    color: var(--emo-text-secondary);
+    color: #64748b;
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: 0.94rem;
     padding: 10px 22px;
     border: 1px solid transparent;
     transition: all 0.2s ease;
@@ -170,30 +158,327 @@ div.stButton > button:focus-visible {
     text-align: center;
 }
 .stTabs [data-baseweb="tab"]:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.05);
+    color: #0f172a;
+    background: rgba(255, 255, 255, 0.8);
 }
 .stTabs [aria-selected="true"] {
-    background: linear-gradient(135deg, #232b45 0%, #161c2e 100%) !important;
-    color: #ffffff !important;
-    border: 1px solid rgba(129, 140, 248, 0.4) !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    background: #ffffff !important;
+    color: #6d28d9 !important;
+    border: 1px solid #ddd6fe !important;
+    box-shadow: 0 4px 14px rgba(109, 40, 217, 0.12) !important;
 }
 
 /* File Uploader Surface */
 [data-testid="stFileUploaderDropzone"] {
-    background: rgba(18, 24, 40, 0.7) !important;
-    border: 2px dashed rgba(129, 140, 248, 0.45) !important;
+    background: #fbfbfe !important;
+    border: 2px dashed #c4b5fd !important;
     border-radius: var(--emo-radius-lg) !important;
     padding: 2.5rem 1.8rem !important;
     transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.06) !important;
 }
 [data-testid="stFileUploaderDropzone"]:hover {
-    border-color: #818cf8 !important;
-    background: rgba(26, 34, 58, 0.9) !important;
-    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.25) !important;
+    border-color: #7c3aed !important;
+    background: #f5f3ff !important;
+    box-shadow: 0 8px 24px rgba(124, 58, 237, 0.14) !important;
     transform: translateY(-1px) !important;
+}
+
+/* Privacy Truthful Banner */
+.emo-privacy-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 20px;
+    background: #ecfdf5;              /* Light Green / Sage */
+    border: 1px solid #a7f3d0;
+    border-left: 5px solid #059669;
+    border-radius: var(--emo-radius-md);
+    font-size: 0.86rem;
+    color: #065f46;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 10px rgba(5, 150, 105, 0.08);
+}
+.emo-privacy-icon {
+    font-size: 1.25rem;
+    color: #059669;
+    line-height: 1;
+}
+
+/* Brand Banner on White Background */
+.emo-brand-banner {
+    position: relative;
+    text-align: center;
+    padding: 3rem 2rem 2.2rem 2rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f5f3ff 50%, #f0f9ff 100%);
+    border: 1px solid #e0e7ff;
+    border-radius: 24px;
+    margin-bottom: 2rem;
+    box-shadow: var(--emo-shadow-elevated);
+    overflow: hidden;
+}
+.emo-brand-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 20%; right: 20%; height: 3px;
+    background: linear-gradient(90deg, #7c3aed, #0284c7, #10b981);
+}
+.emo-micro-badge {
+    display: inline-block;
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    font-weight: 800;
+    color: #6d28d9;
+    background: #ede9fe;
+    border: 1px solid #ddd6fe;
+    padding: 0.35rem 1.1rem;
+    border-radius: 30px;
+    margin-bottom: 0.9rem;
+}
+.emo-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 4.4rem;
+    font-weight: 900;
+    color: #1e1b4b;
+    letter-spacing: 0.12em;
+    margin: 0;
+    line-height: 1;
+    text-transform: uppercase;
+}
+.emo-subtitle {
+    font-size: 1.02rem;
+    color: #64748b;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-top: 0.8rem;
+    font-weight: 700;
+}
+.emo-ticker-bar {
+    display: flex;
+    justify-content: center;
+    gap: 1.6rem;
+    flex-wrap: wrap;
+    margin-top: 1.6rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid #e2e8f0;
+}
+.emo-ticker-item {
+    font-size: 0.78rem;
+    color: #334155;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #ffffff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Glass & Clean White Cards */
+.emo-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 1.6rem;
+    margin-bottom: 1.3rem;
+    box-shadow: var(--emo-shadow-soft);
+}
+
+/* Visual Dossier Frame */
+.dossier-frame {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 20px;
+    padding: 1.2rem;
+    box-shadow: var(--emo-shadow-soft);
+}
+.dossier-tag {
+    position: absolute;
+    top: 1.8rem;
+    right: 1.8rem;
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    font-weight: 800;
+    padding: 0.35rem 0.85rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+}
+
+/* Score Hero Showcase in Lavender & Slate */
+.score-hero-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #f5f3ff 0%, #e0f2fe 100%);
+    border: 1px solid #c7d2fe;
+    border-radius: 22px;
+    padding: 1.8rem 2.2rem;
+    margin-bottom: 1.6rem;
+    box-shadow: var(--emo-shadow-soft);
+}
+.score-number {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 4.4rem;
+    font-weight: 900;
+    line-height: 1;
+    color: #1e1b4b;
+}
+.score-tier-badge {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: 800;
+    padding: 0.48rem 1.2rem;
+    border-radius: 28px;
+    display: inline-block;
+    margin-bottom: 0.6rem;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Light Semantic Tag Chips */
+.emo-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.95rem;
+    border-radius: 12px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    color: #1e293b;
+    margin: 0.3rem 0.4rem 0.3rem 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.emo-chip-pink {
+    background: #fdf2f8;
+    border: 1px solid #fbcfe8;
+    color: #9d174d;
+}
+.emo-chip-emerald {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #065f46;
+}
+.emo-chip-amber {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+}
+.emo-chip-cyan {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    color: #0369a1;
+}
+
+/* Palette Swatches */
+.palette-container {
+    display: flex;
+    gap: 0.95rem;
+    margin: 1.4rem 0;
+    flex-wrap: wrap;
+}
+.palette-item {
+    flex: 1;
+    min-width: 110px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 0.85rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.palette-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Strategic Styling Pivot Cards */
+.pivot-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 1.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: var(--emo-shadow-soft);
+    position: relative;
+    overflow: hidden;
+}
+.pivot-card-top-1 { border-top: 5px solid #7c3aed; }  /* Lavender / Violet */
+.pivot-card-top-2 { border-top: 5px solid #0284c7; }  /* Light Blue */
+.pivot-card-top-3 { border-top: 5px solid #059669; }  /* Light Green / Sage */
+
+.pivot-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.18rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.75rem;
+    line-height: 1.35;
+}
+.pivot-category {
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: #6d28d9;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+.pivot-flaw {
+    font-size: 0.88rem;
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 0.95rem;
+    padding: 0.6rem 0.8rem;
+    background: #fef2f2;
+    border-radius: 8px;
+    border-left: 3px solid #ef4444;
+}
+.pivot-action {
+    font-size: 0.92rem;
+    color: #1e1b4b;
+    line-height: 1.6;
+    background: #f5f3ff;
+    padding: 0.85rem;
+    border-radius: 12px;
+    border-left: 3px solid #7c3aed;
+    margin-bottom: 0.95rem;
+}
+.pivot-rule {
+    font-size: 0.82rem;
+    color: #64748b;
+    font-style: italic;
+    margin-top: 0.35rem;
+}
+
+/* Editorial Review Box */
+.editorial-review-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-left: 5px solid #7c3aed;
+    border-radius: 18px;
+    padding: 1.8rem;
+    line-height: 1.8;
+    font-size: 0.98rem;
+    color: #334155;
+    box-shadow: var(--emo-shadow-soft);
+}
+.editorial-review-card strong {
+    color: #0f172a;
+    font-weight: 700;
 }
 
 /* Mobile & Tablet Responsive Media Queries */
@@ -216,140 +501,6 @@ div.stButton > button:focus-visible {
         gap: 1.2rem !important;
     }
 }
-
-
-/* Privacy Truthful Banner */
-.emo-privacy-notice {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 12px 18px;
-    background: rgba(16, 185, 129, 0.06);
-    border: 1px solid rgba(16, 185, 129, 0.22);
-    border-radius: var(--emo-radius-sm);
-    font-size: 0.82rem;
-    color: #cbd5e1;
-    margin-bottom: 1.5rem;
-}
-.emo-privacy-icon {
-    font-size: 1.1rem;
-    color: var(--emo-status-success);
-    line-height: 1;
-}
-
-/* Editorial Brand Bar */
-.emo-header-container {
-    text-align: center;
-    padding: 2.5rem 1.5rem 2rem 1.5rem;
-    margin-bottom: 2rem;
-    background: linear-gradient(180deg, rgba(23, 29, 48, 0.65) 0%, rgba(10, 13, 23, 0.80) 100%);
-    border: 1px solid var(--emo-border-strong);
-    border-radius: var(--emo-radius-xl);
-    backdrop-filter: blur(20px);
-    box-shadow: var(--emo-shadow-elevated);
-}
-.emo-eyebrow {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--emo-brand-lavender);
-    margin-bottom: 0.6rem;
-}
-.emo-brand-title {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 3.2rem;
-    font-weight: 700;
-    margin: 0;
-    line-height: 1.1;
-    color: #ffffff;
-    letter-spacing: -0.01em;
-}
-.emo-tagline {
-    font-size: 1.05rem;
-    color: var(--emo-text-secondary);
-    margin-top: 0.8rem;
-    max-width: 650px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.5;
-}
-
-/* Scorecard Radial / Metric Hero */
-.emo-scorecard {
-    background: var(--emo-surface-1);
-    border: 1px solid var(--emo-border-subtle);
-    border-radius: var(--emo-radius-lg);
-    padding: 1.6rem;
-    box-shadow: var(--emo-shadow-soft);
-    margin-bottom: 1.5rem;
-}
-.emo-score-big {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 3.8rem;
-    font-weight: 700;
-    line-height: 1;
-    color: #ffffff;
-}
-
-/* Strategic Pivot Cards */
-.emo-pivot-card {
-    background: var(--emo-surface-2);
-    border: 1px solid var(--emo-border-subtle);
-    border-left: 4px solid var(--emo-brand-primary);
-    border-radius: var(--emo-radius-md);
-    padding: 1.25rem 1.4rem;
-    margin-bottom: 1rem;
-    transition: transform 0.15s ease, border-color 0.15s ease;
-}
-.emo-pivot-card:hover {
-    border-color: var(--emo-border-strong);
-    border-left-color: var(--emo-brand-lavender);
-    transform: translateY(-2px);
-}
-.emo-pivot-num {
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--emo-brand-lavender);
-    margin-bottom: 0.35rem;
-}
-.emo-pivot-title {
-    font-size: 1.12rem;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 0.45rem;
-}
-.emo-pivot-body {
-    font-size: 0.92rem;
-    color: var(--emo-text-secondary);
-    line-height: 1.55;
-}
-
-/* Benchmark Metric Stat Box */
-.emo-stat-box {
-    background: var(--emo-surface-1);
-    border: 1px solid var(--emo-border-subtle);
-    border-radius: var(--emo-radius-md);
-    padding: 1.2rem;
-    text-align: center;
-}
-.emo-stat-val {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: #ffffff;
-    line-height: 1.1;
-}
-.emo-stat-label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    font-weight: 700;
-    color: var(--emo-text-muted);
-    margin-top: 0.35rem;
-}
 </style>
 """
 
@@ -359,19 +510,19 @@ div.stButton > button:focus-visible {
 # =====================================================================
 
 def render_privacy_notice(
-    storage_type: str = "Client-Side & Ephemeral Session",
-    retention_policy: str = "Immediately discarded upon tab close. No external transmission without consent."
+    storage_type: str = "Client-Side Ephemeral RAM Buffer",
+    retention_policy: str = "Purged immediately upon tab close. No external server transmission without explicit user trigger."
 ) -> str:
     """
-    Renders a truthful, auditable privacy notice complying with WCAG 2.2 AA.
-    Reflects the actual client-side PyTorch / Streamlit processing state.
+    Renders an auditable privacy notice complying with WCAG 2.2 AA.
+    Features Sage / Light Green verified indicators on a pure white surface.
     """
     return f"""
     <aside class="emo-privacy-notice" role="note" aria-label="Privacy & Data Processing Disclosure">
         <div class="emo-privacy-icon" aria-hidden="true">🔒</div>
         <div>
-            <strong style="color: #f8fafc;">Truthful Privacy Architecture:</strong>
-            <span>All outfit analysis and deep learning inference execute <em>locally on this client runtime</em> via PyTorch. 
+            <strong style="color: #065f46; font-size: 0.92rem;">Truthful Privacy Architecture:</strong>
+            <span style="color: #047857; margin-left: 4px;">All outfit analysis and deep learning inference execute <em>locally on this client runtime</em> via PyTorch. 
             <strong>Camera & Image Data:</strong> {html.escape(storage_type)} — {html.escape(retention_policy)}</span>
         </div>
     </aside>
@@ -384,26 +535,26 @@ def render_brand_header(
     tagline: str = "Rigorous sartorial critique bridging deep vision embeddings with classical colorimetry and silhouette proportions."
 ) -> str:
     """
-    Renders an editorial brand header.
+    Renders an editorial brand header in White, Lavender, and Sky Blue.
     """
     return f"""
-    <header class="emo-header-container" role="banner">
-        <div class="emo-eyebrow">{html.escape(eyebrow)}</div>
-        <h1 class="emo-brand-title">{html.escape(title)}</h1>
-        <p class="emo-tagline">{html.escape(tagline)}</p>
+    <header class="emo-brand-banner" role="banner">
+        <div class="emo-micro-badge">{html.escape(eyebrow)}</div>
+        <h1 class="emo-title">{html.escape(title)}</h1>
+        <p class="emo-subtitle">{html.escape(tagline)}</p>
     </header>
     """
 
 
 def render_stat_card(value: str, label: str, subtitle: Optional[str] = None) -> str:
     """
-    Renders an accessible stat card with verified metrics.
+    Renders an accessible stat card with verified metrics in Light Green / Sky Blue.
     """
-    sub_html = f'<div style="font-size: 0.78rem; color: #10b981; margin-top: 0.2rem;">{html.escape(subtitle)}</div>' if subtitle else ''
+    sub_html = f'<div style="font-size: 0.8rem; color: #059669; font-weight: 700; margin-top: 0.2rem;">{html.escape(subtitle)}</div>' if subtitle else ''
     return f"""
-    <div class="emo-stat-box">
-        <div class="emo-stat-val">{html.escape(value)}</div>
-        <div class="emo-stat-label">{html.escape(label)}</div>
+    <div class="emo-card" style="text-align: center; border-top: 4px solid #7c3aed;">
+        <div style="font-family: 'Playfair Display', Georgia, serif; font-size: 2.2rem; font-weight: 800; color: #1e1b4b; line-height: 1.1;">{html.escape(value)}</div>
+        <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; color: #64748b; margin-top: 0.35rem;">{html.escape(label)}</div>
         {sub_html}
     </div>
     """
@@ -411,21 +562,24 @@ def render_stat_card(value: str, label: str, subtitle: Optional[str] = None) -> 
 
 def render_pivot_card(number: int, title: str, description: str, hex_chip: Optional[str] = None) -> str:
     """
-    Renders an evidence-grounded styling pivot card with optional hex color chip.
+    Renders an evidence-grounded styling pivot card with Lavender/Blue/Green top borders.
     """
     chip_html = ""
     if hex_chip:
         chip_html = f"""
-        <div style="display: inline-flex; align-items: center; gap: 8px; margin-top: 0.6rem; padding: 4px 10px; background: rgba(0,0,0,0.3); border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);">
-            <span style="width: 14px; height: 14px; border-radius: 3px; background-color: {html.escape(hex_chip)}; display: inline-block; border: 1px solid rgba(255,255,255,0.3);"></span>
-            <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #cbd5e1;">Target Color: {html.escape(hex_chip)}</span>
+        <div style="display: inline-flex; align-items: center; gap: 8px; margin-top: 0.6rem; padding: 4px 10px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
+            <span style="width: 14px; height: 14px; border-radius: 3px; background-color: {html.escape(hex_chip)}; display: inline-block; border: 1px solid #cbd5e1;"></span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #334155;">Target Color: {html.escape(hex_chip)}</span>
         </div>
         """
+    top_border_class = f"pivot-card-top-{(number % 3) + 1}"
     return f"""
-    <article class="emo-pivot-card" role="region" aria-label="Styling Pivot {number}">
-        <div class="emo-pivot-num">Strategic Upgrade {number}</div>
-        <div class="emo-pivot-title">{html.escape(title)}</div>
-        <div class="emo-pivot-body">{html.escape(description)}</div>
+    <article class="pivot-card {top_border_class}" role="region" aria-label="Styling Pivot {number}">
+        <div>
+            <div class="pivot-category">Strategic Upgrade {number}</div>
+            <div class="pivot-title">{html.escape(title)}</div>
+            <div class="pivot-action">{html.escape(description)}</div>
+        </div>
         {chip_html}
     </article>
     """

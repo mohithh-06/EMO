@@ -49,8 +49,8 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
     .stApp {
-        background: radial-gradient(circle at 50% -15%, #181c2e 0%, #0a0c14 45%, #040508 100%);
-        color: #f1f5f9;
+        background: #ffffff !important;
+        color: #0f172a;
         font-family: 'Plus Jakarta Sans', sans-serif;
     }
     h1, h2, h3, h4 { font-family: 'Cinzel', serif !important; }
@@ -59,7 +59,7 @@ st.markdown("""
         position: relative;
         text-align: center;
         padding: 2.8rem 2rem 2rem 2rem;
-        background: linear-gradient(180deg, rgba(28, 33, 54, 0.75) 0%, rgba(12, 14, 24, 0.85) 100%);
+        background: linear-gradient(135deg, #ffffff 0%, #f5f3ff 50%, #f0f9ff 100%); border: 1px solid #e0e7ff;
         border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 24px;
         margin-bottom: 2.5rem;
@@ -453,7 +453,7 @@ with tab_hf:
     <div style="background: rgba(30, 36, 60, 0.7); border: 1px solid rgba(129, 140, 248, 0.3); border-radius: 14px; padding: 1.2rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
         <div>
             <span style="font-weight: 800; color: #818cf8; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.15em;">Hugging Face Hub Status</span>
-            <div style="color: #f1f5f9; font-size: 1.05rem; font-weight: 700; margin-top: 0.2rem;">Authenticated User: Mohithh14</div>
+            <div style="color: #0f172a; font-size: 1.05rem; font-weight: 700; margin-top: 0.2rem;">Authenticated User: Mohithh14</div>
         </div>
         <span style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; padding: 0.35rem 0.9rem; border-radius: 20px; font-size: 0.82rem; font-weight: 700;">● Connected</span>
     </div>

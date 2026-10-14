@@ -31,8 +31,8 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
     .stApp {
-        background: radial-gradient(circle at 50% -15%, #181c2e 0%, #0a0c14 45%, #040508 100%);
-        color: #f1f5f9;
+        background: #ffffff !important;
+        color: #0f172a;
         font-family: 'Plus Jakarta Sans', sans-serif;
     }
     h1, h2, h3, h4 { font-family: 'Cinzel', serif !important; }
@@ -41,7 +41,7 @@ st.markdown("""
         position: relative;
         text-align: center;
         padding: 2.8rem 2rem 2rem 2rem;
-        background: linear-gradient(180deg, rgba(28, 33, 54, 0.75) 0%, rgba(12, 14, 24, 0.85) 100%);
+        background: linear-gradient(135deg, #ffffff 0%, #f5f3ff 50%, #f0f9ff 100%); border: 1px solid #e0e7ff;
         border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 24px;
         margin-bottom: 2.5rem;
@@ -82,7 +82,7 @@ st.markdown("""
     }
 
     .emo-card {
-        background: rgba(18, 22, 36, 0.88);
+        background: #ffffff; border: 1px solid #e2e8f0;
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 20px;
         padding: 1.8rem;
@@ -217,7 +217,7 @@ with col_preview:
             chips_html += f"""
             <div class="swatch-chip">
                 <div style="width: 20px; height: 20px; border-radius: 6px; background: {c['hex']}; border: 1px solid rgba(255,255,255,0.25);"></div>
-                <span style="font-size: 0.82rem; font-weight: 700; color: #f1f5f9;">{c['name']}</span>
+                <span style="font-size: 0.82rem; font-weight: 700; color: #0f172a;">{c['name']}</span>
                 <span style="font-size: 0.74rem; color: #94a3b8; font-family: monospace;">{c['hex']}</span>
             </div>
             """

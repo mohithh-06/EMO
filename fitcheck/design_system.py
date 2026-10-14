@@ -79,62 +79,144 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
     outline-offset: 2px !important;
 }
 
-/* Universal Streamlit Control Polish */
+/* Universal Streamlit Control Polish & Responsive Luxury Buttons */
 div.stButton > button {
-    border-radius: var(--emo-radius-sm);
-    font-weight: 600;
-    font-size: 0.92rem;
-    padding: 0.6rem 1.4rem;
-    border: 1px solid var(--emo-border-strong);
-    background: var(--emo-surface-elevated);
-    color: var(--emo-text-primary);
-    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-}
-div.stButton > button:hover {
-    background: var(--emo-brand-primary);
-    border-color: var(--emo-brand-primary);
-    color: #ffffff;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
-}
-div.stButton > button:active {
-    transform: translateY(0);
+    position: relative;
+    border-radius: var(--emo-radius-md) !important;
+    font-weight: 700 !important;
+    font-size: 0.94rem !important;
+    letter-spacing: 0.04em !important;
+    padding: 0.75rem 1.6rem !important;
+    min-height: 48px !important;
+    width: 100% !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    background: linear-gradient(135deg, rgba(30, 38, 64, 0.95) 0%, rgba(18, 22, 38, 0.98) 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+    cursor: pointer !important;
+    text-align: center !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    overflow: hidden !important;
 }
 
-/* Tab Polish */
+div.stButton > button::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+    transition: left 0.5s ease;
+}
+
+div.stButton > button:hover {
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #ec4899 100%) !important;
+    border-color: rgba(165, 180, 252, 0.6) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px) scale(1.01) !important;
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+div.stButton > button:hover::before {
+    left: 100%;
+}
+
+div.stButton > button:active {
+    transform: translateY(0) scale(0.99) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+div.stButton > button:focus-visible {
+    outline: 2px solid var(--emo-brand-lavender) !important;
+    outline-offset: 3px !important;
+}
+
+/* Sidebar Custom Responsive Button Grid */
+[data-testid="stSidebar"] div.stButton > button {
+    font-size: 0.85rem !important;
+    padding: 0.6rem 0.9rem !important;
+    min-height: 42px !important;
+    border-radius: var(--emo-radius-sm) !important;
+    background: rgba(22, 28, 48, 0.85) !important;
+}
+
+[data-testid="stSidebar"] div.stButton > button:hover {
+    background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%) !important;
+    box-shadow: 0 6px 18px rgba(99, 102, 241, 0.4) !important;
+}
+
+/* Responsive Tab Bar Polish */
 .stTabs [data-baseweb="tab-list"] {
-    gap: 8px;
-    background: rgba(13, 18, 31, 0.75);
-    padding: 6px;
-    border-radius: var(--emo-radius-md);
-    border: 1px solid var(--emo-border-subtle);
+    gap: 10px;
+    background: rgba(13, 18, 31, 0.85);
+    padding: 8px;
+    border-radius: var(--emo-radius-lg);
+    border: 1px solid var(--emo-border-strong);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-wrap: wrap;
 }
 .stTabs [data-baseweb="tab"] {
-    border-radius: var(--emo-radius-sm);
+    border-radius: var(--emo-radius-md);
     color: var(--emo-text-secondary);
-    font-weight: 600;
-    padding: 8px 18px;
-    border: none;
-    transition: all 0.15s ease;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 10px 22px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    flex: 1 1 auto;
+    text-align: center;
+}
+.stTabs [data-baseweb="tab"]:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
 }
 .stTabs [aria-selected="true"] {
-    background: var(--emo-surface-elevated) !important;
+    background: linear-gradient(135deg, #232b45 0%, #161c2e 100%) !important;
     color: #ffffff !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(129, 140, 248, 0.4) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
 }
 
 /* File Uploader Surface */
 [data-testid="stFileUploaderDropzone"] {
-    background: rgba(18, 24, 38, 0.65) !important;
-    border: 2px dashed rgba(99, 102, 241, 0.35) !important;
-    border-radius: var(--emo-radius-md) !important;
-    padding: 2.2rem 1.5rem !important;
-    transition: border-color 0.2s ease;
+    background: rgba(18, 24, 40, 0.7) !important;
+    border: 2px dashed rgba(129, 140, 248, 0.45) !important;
+    border-radius: var(--emo-radius-lg) !important;
+    padding: 2.5rem 1.8rem !important;
+    transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3) !important;
 }
 [data-testid="stFileUploaderDropzone"]:hover {
-    border-color: var(--emo-brand-primary) !important;
-    background: rgba(26, 34, 53, 0.85) !important;
+    border-color: #818cf8 !important;
+    background: rgba(26, 34, 58, 0.9) !important;
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.25) !important;
+    transform: translateY(-1px) !important;
 }
+
+/* Mobile & Tablet Responsive Media Queries */
+@media (max-width: 768px) {
+    div.stButton > button {
+        font-size: 0.88rem !important;
+        padding: 0.65rem 1.1rem !important;
+        min-height: 44px !important;
+    }
+    .stTabs [data-baseweb="tab"] {
+        padding: 8px 14px !important;
+        font-size: 0.84rem !important;
+    }
+    .emo-title {
+        font-size: 2.8rem !important;
+    }
+    .score-hero-container {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 1.2rem !important;
+    }
+}
+
 
 /* Privacy Truthful Banner */
 .emo-privacy-notice {

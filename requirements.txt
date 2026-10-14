@@ -1,14 +1,13 @@
 torch
-transformers>=4.52.0
-Pillow
-langchain
-imagehash
-pymongo
-streamlit
 torchvision
-accelerate
-modelscope
-qwen-vl-utils[decord]==0.0.8
-dnspython pymongo
-dns
-tenacity
+transformers>=4.40.0
+streamlit>=1.35.0
+pillow>=10.0.0
+imagehash>=4.3.0
+scikit-learn>=1.4.0
+scipy>=1.12.0
+numpy>=1.26.0
+tenacity>=8.2.0
+huggingface_hub>=0.23.0
+pandas>=2.0.0
+pyarrow>=14.0.0

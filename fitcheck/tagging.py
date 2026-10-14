@@ -1,114 +1,125 @@
+"""
+Wardrobe Tagging & Attribute Extraction for emo.
+Uses CLIP zero-shot classification combined with K-Means color analysis
+to generate comprehensive, accurate metadata for digitized wardrobe items.
+"""
+
 import os
 import json
+from typing import Dict, Any, List
 from PIL import Image
 import imagehash
-import torch
-from transformers import CLIPProcessor, CLIPModel
 
-# -------------------------------------------------------
-# Device setup (use GPU if available, otherwise CPU)
-# -------------------------------------------------------
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+try:
+    from color_engine import extract_dominant_colors
+    from vision_engine import zero_shot_classify, GENDER_PROMPTS, FORMALITY_PROMPTS, TEXTURE_PROMPTS
+except ImportError:
+    from fitcheck.color_engine import extract_dominant_colors
+    from fitcheck.vision_engine import zero_shot_classify, GENDER_PROMPTS, FORMALITY_PROMPTS, TEXTURE_PROMPTS
 
-# -------------------------------------------------------
-# Load CLIP model & processor
-# -------------------------------------------------------
-# CLIP can compare text labels with image embeddings.
-# Here we use the pretrained "ViT-B/32" variant.
-processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
-model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to(device)
 
-# -------------------------------------------------------
-# Label sets for classification
-# -------------------------------------------------------
-# Each list contains candidate labels for one category.
-# CLIP encodes both the image and each text label into the
-# same embedding space. It then compares them using cosine 
-# similarity (returned as logits_per_image). 
-# The label with the highest similarity score is selected.
-ITEM_LABELS = [
-    "sunglasses", "hats", "jackets", "shirts", "pants", "shorts",
-    "skirts", "dresses", "bags", "shoes"
+CLOSET_ITEM_PROMPTS = [
+    ("Shirts", "a collared button-down shirt, oxford shirt, or formal dress shirt"),
+    ("T-Shirts", "a casual cotton t-shirt or basic tee"),
+    ("Jackets", "a jacket, blazer, coat, or outwear layer"),
+    ("Pants", "a pair of pants, trousers, or slacks"),
+    ("Shorts", "a pair of shorts"),
+    ("Skirts", "a fashionable skirt"),
+    ("Dresses", "a dress, gown, or one-piece outfit"),
+    ("Shoes", "a pair of shoes, sneakers, boots, or heels"),
+    ("Bags", "a handbag, purse, backpack, or tote bag"),
+    ("Sunglasses", "a pair of sunglasses or eyewear"),
+    ("Hats", "a hat, cap, or headwear")
+]
+
+LOCATION_PROMPTS = [
+    ("Indoor", "indoor wardrobe clothing, home wear, or office interior wear"),
+    ("Outdoor", "outdoor outerwear, walking shoes, sun protection, or street wear")
 ]
 
 
-COLOR_LABELS = [
-    "black", "white", "grey", "gray", "blue", "red", "green", "yellow", "brown", "beige",
-    "orange", "purple", "pink", "navy", "gold", "silver"
-]
-
-LOCATION_LABELS = ["Indoor", "Outdoor"]
-FORMALITY_LABELS = ["Formal", "Casual"]
-GENDER_LABELS = ["Men's", "Women's", "Unisex"]
-
-
-# -------------------------------------------------------
-# Helper function: classify
-# -------------------------------------------------------
-def classify(image, labels):
+def classify(image: Image.Image, labels: List[str]) -> str:
     """
-    Given an image and a list of labels, return the label 
-    with the highest similarity according to CLIP.
+    Backwards-compatible classification helper.
     """
-    # Encode both the text labels and the image
-    inputs = processor(text=labels, images=image, return_tensors="pt", padding=True).to(device)
-    outputs = model(**inputs)
+    candidates = [(lbl, f"a photo of {lbl}") for lbl in labels]
+    res = zero_shot_classify(image, candidates, top_k=1)
+    return res[0]["label"] if res else labels[0]
 
-    # Compare embeddings: logits_per_image gives similarity
-    logits = outputs.logits_per_image
-    probs = logits.softmax(dim=1)
-    
-    # Pick the label with highest probability
-    best_idx = probs.argmax().item()
-    return labels[best_idx]
 
-# -------------------------------------------------------
-# Main function: tag_closet_item
-# -------------------------------------------------------
-def tag_closet_item(image_path: str) -> dict:
+def tag_closet_item(image_path: str) -> Dict[str, Any]:
     """
     Tag a clothing item image with:
-    - item type (shirt, shoes, etc.)
-    - color
-    - indoor/outdoor
-    - formality (formal/casual)
-    - gender style (men’s/women’s/unisex)
-
-    Returns a structured JSON-like dictionary.
+    - Item taxonomy
+    - Precise color name and hex code
+    - Dominant color palette (top 3)
+    - Indoor / Outdoor suitability
+    - Formality level
+    - Gender style (Men's / Women's / Unisex)
+    - Fabric texture
+    - Perceptual hash for deduplication
     """
     try:
-        # Load image in RGB mode
+        if not os.path.exists(image_path):
+            raise FileNotFoundError(f"File not found: {image_path}")
+
         image = Image.open(image_path).convert("RGB")
-        
-        # Perceptual hash for deduplication / ID
         phash = str(imagehash.phash(image))
 
-        # Run CLIP classification for each attribute
-        item_type = classify(image, ITEM_LABELS).capitalize()
-        color = classify(image, COLOR_LABELS).capitalize()
+        # 1. Color Extraction
+        palette = extract_dominant_colors(image, n_colors=3)
+        primary_color_name = palette[0]["name"] if palette else "Unknown"
+        primary_color_hex = palette[0]["hex"] if palette else "#000000"
 
-        # Special case: shoes are always "Outdoor"
-        if item_type.lower() == "shoes":
+        # 2. Attribute Extraction via Zero-shot Prompts
+        item_res = zero_shot_classify(image, CLOSET_ITEM_PROMPTS, top_k=1)
+        item_type = item_res[0]["label"] if item_res else "Shirts"
+
+        gender_res = zero_shot_classify(image, GENDER_PROMPTS, top_k=1)
+        gender_raw = gender_res[0]["label"] if gender_res else "Unisex"
+        if "Womens" in gender_raw or "Women" in gender_raw:
+            gender = "Women's"
+        elif "Mens" in gender_raw or "Men" in gender_raw:
+            gender = "Men's"
+        else:
+            gender = "Unisex"
+
+        formality_res = zero_shot_classify(image, FORMALITY_PROMPTS, top_k=1)
+        formality_raw = formality_res[0]["label"] if formality_res else "Casual"
+        if "Formal" in formality_raw:
+            formality = "Formal"
+        elif "Smart Casual" in formality_raw:
+            formality = "Smart Casual"
+        else:
+            formality = "Casual"
+
+        texture_res = zero_shot_classify(image, TEXTURE_PROMPTS, top_k=1)
+        texture = texture_res[0]["label"] if texture_res else "Crisp Woven Cotton"
+
+        # Footwear and sunglasses are typically outdoor
+        if item_type in ["Shoes", "Sunglasses", "Hats"]:
             indoor_outdoor = "Outdoor"
         else:
-            indoor_outdoor = classify(image, LOCATION_LABELS)
+            loc_res = zero_shot_classify(image, LOCATION_PROMPTS, top_k=1)
+            indoor_outdoor = loc_res[0]["label"] if loc_res else "Indoor"
 
-        formality = classify(image, FORMALITY_LABELS)
-        gender = classify(image, GENDER_LABELS)
+        # Relative clean path
+        rel_path = os.path.relpath(image_path, start=os.getcwd()) if os.path.isabs(image_path) else image_path
 
-        # Return a normalized record
         return {
             "image_id": phash,
+            "name": f"{primary_color_name} {item_type}",
             "item_type": item_type,
-            "color": color,
+            "color": primary_color_name,
+            "color_hex": primary_color_hex,
+            "palette": [{"hex": c["hex"], "name": c["name"], "coverage": c["coverage_pct"]} for c in palette],
             "indoor_outdoor": indoor_outdoor,
             "formality": formality,
             "gender": gender,
-            "path": image_path,
+            "texture": texture,
+            "path": rel_path,
             "folder": "Closet"
         }
 
     except Exception as e:
-        # Gracefully handle errors (eg. unreadable image)
         return {"error": str(e)}
-

@@ -1,3 +1,23 @@
-SimSun.ttf
-*.pyc
-run_app.bat
+# Python / Virtual Environment
+.venv/
+venv/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Credentials & Tokens
+.env
+*.token
+
+# Temporary / OS / PPT inspection artifacts
+temp/
+*.ps1
+presentation_data.json
+.vscode/
+.idea/
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store

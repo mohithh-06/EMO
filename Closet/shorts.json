@@ -1,10 +1,30 @@
 {
   "image_id": "ecb0914f92e13fa4",
+  "name": "Teal / Dark Cyan Shorts",
   "item_type": "Shorts",
-  "color": "Blue",
+  "color": "Teal / Dark Cyan",
+  "color_hex": "#2798C8",
+  "palette": [
+    {
+      "hex": "#2798C8",
+      "name": "Teal / Dark Cyan",
+      "coverage": 50.5
+    },
+    {
+      "hex": "#FDFEFE",
+      "name": "Pure White",
+      "coverage": 46.8
+    },
+    {
+      "hex": "#115D89",
+      "name": "Teal / Dark Cyan",
+      "coverage": 2.8
+    }
+  ],
   "indoor_outdoor": "Outdoor",
   "formality": "Casual",
-  "gender": "Men's",
-  "path": "C:\\Users\\danie\\Documents\\Humber\\Gen-AI-Hackathon\\Images\\shorts.jpg",
+  "gender": "Unisex",
+  "texture": "Heavy Structured Wool / Denim",
+  "path": "Images\\shorts.jpg",
   "folder": "Closet"
 }

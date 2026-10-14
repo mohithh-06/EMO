@@ -1,163 +1,115 @@
 """
-Provides a function to analyze fashion images using Qwen2.5-VL.
-Loads images from the 'Images' folder, applies a fashion critique prompt,
-and returns structured style, rating, and commentary output.
+Orchestration Engine for Outfit Analysis in emo.
+Integrates Color Theory, Deep Vision (CLIP), Spatial Segmentation, and High-Fashion Editorial Critique.
+Provides both structured dict output and formatted critique markdown for seamless UI and API consumption.
 """
 
-from PIL import Image
-import torch
-from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
-from langchain.tools import tool
 import os
-import re
-from modelscope import AutoProcessor, Qwen2_5_VLForConditionalGeneration
+from typing import Dict, Any, Optional
+from PIL import Image
 
-# ----------------------------
-# Model & Processor Setup
-# ----------------------------
+try:
+    from color_engine import extract_dominant_colors, evaluate_palette_harmony
+    from vision_engine import analyze_outfit_deep_vision
+    from critique_generator import generate_full_critique_package
+except ImportError:
+    from fitcheck.color_engine import extract_dominant_colors, evaluate_palette_harmony
+    from fitcheck.vision_engine import analyze_outfit_deep_vision
+    from fitcheck.critique_generator import generate_full_critique_package
 
-# Use quantized 3B Qwen2.5-VL model (lightweight enough for local inference)
-model_id = "Qwen/Qwen2.5-VL-3B-Instruct-AWQ"
 
-# Load multimodal processor (handles both text + images)
-processor = AutoProcessor.from_pretrained(model_id)
-
-# Load model onto GPU if available, use float16 for memory efficiency
-model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
-    model_id,
-    torch_dtype=torch.float16,
-    device_map="auto"
-)
-
-# Folder where images are stored
-IMAGE_DIR = "Images"
-
-# ----------------------------
-# Prompt Template
-# ----------------------------
-
-# Fashion prompt enforces structure:
-# "Style:", "Rating:", and "Comment:" must appear
-# so output can be parsed reliably with regex
-FASHION_PROMPT = (
-    "You're a ruthless, stylish fashion critic with zero tolerance for mediocrity. "
-    "Your job is to judge this outfit with sharp precision and brutal honesty. "
-    "Forget politeness — if it’s boring, mismatched, or unoriginal, tear it apart. "
-    "Only truly exceptional style earns praise, and even then, make them fight for it.\n\n"
-    "Follow this exact format, don't deviate from it:\n"
-    "Style: [Clear, blunt breakdown of the clothing and overall aesthetic — call out strengths and weaknesses with no filter]\n"
-    "Rating: [Score out of 100 — average is 45. Weak or ugly fits land in the 20–45 range. Only elite looks should break 80]\n"
-    "Comment: [Savage one-liner — roast it if it deserves it, or give reluctant praise if it's genuinely stylish. No fluff, no mercy.]"
-)
-
-# ----------------------------
-# Utility Functions
-# ----------------------------
-
-# Image loader
-def get_image(image_name: str) -> Image.Image:
-    """Load and return an image from the Images/ folder (RGB mode)."""
-    image_path = os.path.join(IMAGE_DIR, image_name)
-    if not os.path.exists(image_path):
-        raise FileNotFoundError(f"Image not found: {image_path}")
-    return Image.open(image_path).convert("RGB")
-
-# Extract rating score from AI output
-def extract_rating(text):
-    """Parse numeric rating (0-1 scale) from model output."""
-    # using this means that we need to state in the prompt that "Rating: xx/100" must appear in the output exactly once"
-    match = re.search(r'Rating:\s*(\d+)/100', text)
-    if match:
-        score = int(match.group(1))
-        return score / 100.0
-    return None  # or raise an error / default value
-
-# Extract style comments from AI output
-def extract_style_paragraph(text):
-    """Extract the 'Style:' section from model output."""
-    match = re.search(r'Style:\s*(.*?)(?=\s*(Rating:|Comment:|$))', text, re.DOTALL)
-    if match:
-        return match.group(1).strip()
-    return None
-
-# Extract comments for improvement from AI output
-def extract_comment(text):
-    """Extract the 'Comment:' section from model output."""
-    match = re.search(r'Comment:\s*(.*)', text, re.DOTALL)
-    if match:
-        return match.group(1).strip()
-    return None
-
-# ----------------------------
-# Core Outfit Analyzer
-# ----------------------------
-
-# Outfit analyzer tool
-def analyze_outfit(image_name: str) -> str:
+def analyze_outfit_pipeline(image_input) -> Dict[str, Any]:
     """
-    Run the Qwen2.5-VL model on a given outfit image.
-    Returns a structured critique (Style, Rating, Comment).
+    Run end-to-end dynamic analysis on an image (filepath or PIL.Image).
+    Returns complete structured payload: palette, harmony, vision detections, scores, critique, and pivots.
     """
-    print(f"[DEBUG] Loading image: {image_name}")
-    print("[DEBUG] CWD:", os.getcwd())
-    print("[DEBUG] Expected path:", os.path.join(IMAGE_DIR, image_name))
+    if isinstance(image_input, str):
+        if not os.path.exists(image_input):
+            raise FileNotFoundError(f"Outfit image not found: {image_input}")
+        image = Image.open(image_input).convert("RGB")
+        image_path = image_input
+    else:
+        image = image_input.convert("RGB")
+        image_path = getattr(image_input, "filename", "uploaded_outfit.jpg")
 
-    img = get_image(image_name)
+    # Step 1: Color Quantization & Color Wheel Harmony
+    palette = extract_dominant_colors(image, n_colors=5)
+    harmony = evaluate_palette_harmony(palette)
 
-    print("[DEBUG] Creating message payload")
+    # Step 2: Deep Vision Classification (Gender, Garment, Silhouette, Formality, Texture, Scorecard)
+    vision_results = analyze_outfit_deep_vision(image, harmony)
 
-    # Create conversation like payload with both image + text prompt
-    messages = [
-        {
-            "role": "user",
-            "content": [
-                {"type": "image", "image": img},
-                {"type": "text", "text": FASHION_PROMPT},
-            ],
-        }
-    ]
+    # Step 3: High-Fashion Editorial Critique & Dynamic Styling Pivots
+    critique_pkg = generate_full_critique_package(vision_results, palette, harmony)
 
-    print("[DEBUG] Applying chat template")
-
-    # Prepare model input
-    text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-
-    print("[DEBUG] Preprocessing input")
-    inputs = processor(text=[text], images=[img], padding=True, return_tensors="pt").to("cuda")
-
-    # Generate critique
-    print("[DEBUG] Running model.generate()")
-    outputs = model.generate(
-        **inputs,
-        max_new_tokens=256,
-        temperature=0.8,
-        top_p=0.95,
-        repetition_penalty=1.2,
-        do_sample=True,
-        eos_token_id=processor.tokenizer.eos_token_id
+    # Step 4: Build Formatted Text Critique (matching standard format)
+    formatted_markdown = (
+        f"### {critique_pkg['headline']}\n\n"
+        f"**Style:**\n{critique_pkg['breakdown']}\n\n"
+        f"**Rating:** {critique_pkg['overall_score']}/100 — *{critique_pkg['tier_title']}*\n\n"
+        f"**Comment:**\n\"{critique_pkg['savage_verdict']}\"\n\n"
     )
 
+    return {
+        "image_path": image_path,
+        "palette": palette,
+        "harmony": harmony,
+        "vision": vision_results,
+        "critique": critique_pkg,
+        "formatted_text": formatted_markdown,
+        "rating_score": critique_pkg["overall_score"] / 100.0,
+        "overall_score": critique_pkg["overall_score"],
+        "tier_title": critique_pkg["tier_title"],
+        "tier_desc": critique_pkg["tier_desc"],
+        "badge_color": critique_pkg["badge_color"],
+        "metrics": critique_pkg["metrics"],
+        "pivots": critique_pkg["pivots"]
+    }
 
-    # Decode into human-readable text
-    print("[DEBUG] Trimming generated tokens")
-    generated_ids_trimmed = [out[len(inp):] for inp, out in zip(inputs.input_ids, outputs)]
 
-    print("[DEBUG] Decoding response")
-    result = processor.batch_decode(generated_ids_trimmed, skip_special_tokens=True)
+def analyze_outfit(image_input) -> str:
+    """Returns the formatted markdown string analysis for backwards compatibility."""
+    res = analyze_outfit_pipeline(image_input)
+    return res["formatted_text"]
 
-    print("[DEBUG] Output ready")
-    return result[0]
 
-# ----------------------------
-# LangChain Integration
-# ----------------------------
+def extract_rating(analysis_payload) -> float:
+    """Extract rating as float 0.0-1.0 from dict or text."""
+    if isinstance(analysis_payload, dict):
+        return analysis_payload.get("rating_score", 0.75)
+    import re
+    match = re.search(r'Rating:\s*(\d+)/100', str(analysis_payload))
+    if match:
+        return int(match.group(1)) / 100.0
+    return 0.75
 
-@tool
-def analyze_outfit_tool(image_name: str) -> str:
-    """
-    LangChain tool version of the outfit analyzer.
-    Enables easy integration with LangChain workflows.
-    Input: image filename (in Images/).
-    Output: Model critique (Style, Rating, Comment).
-    """
-    return analyze_outfit(image_name)
+
+def extract_style_paragraph(analysis_payload) -> str:
+    """Extract style breakdown from dict or text."""
+    if isinstance(analysis_payload, dict):
+        return analysis_payload.get("critique", {}).get("breakdown", "")
+    import re
+    match = re.search(r'\*\*Style:\*\*\s*(.*?)(?=\s*(\*\*Rating:|\*\*Comment:|$))', str(analysis_payload), re.DOTALL)
+    if match:
+        return match.group(1).strip()
+    return str(analysis_payload)
+
+
+def extract_comment(analysis_payload) -> str:
+    """Extract critique verdict from dict or text."""
+    if isinstance(analysis_payload, dict):
+        return analysis_payload.get("critique", {}).get("savage_verdict", "")
+    import re
+    match = re.search(r'\*\*Comment:\*\*\s*(.*)', str(analysis_payload), re.DOTALL)
+    if match:
+        return match.group(1).strip().strip('"')
+    return ""
+
+
+class OutfitAnalyzerTool:
+    """LangChain / Tool compatible wrapper."""
+    def invoke(self, image_path: str):
+        return analyze_outfit_pipeline(image_path)
+
+
+analyze_outfit_tool = OutfitAnalyzerTool()

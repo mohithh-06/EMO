@@ -1,0 +1,346 @@
+{
+  "overall_multi_task_accuracy": 98.8,
+  "overall_top3_accuracy": 100.0,
+  "average_inference_latency_ms": 1.38,
+  "latency_profiles": {
+    "mean_ms": 1.38,
+    "p50_ms": 1.22,
+    "p95_ms": 1.84
+  },
+  "tested_samples": 60,
+  "model_comparison": [
+    {
+      "Model Architecture": "Naive Majority-Class Baseline",
+      "Type": "Statistical Baseline",
+      "Top-1 Accuracy (%)": 44.6,
+      "Inference Latency (ms)": 0.01,
+      "Parameters": 0
+    },
+    {
+      "Model Architecture": "Zero-Shot OpenAI CLIP ViT-B/32",
+      "Type": "Pretrained Foundation Model",
+      "Top-1 Accuracy (%)": 78.4,
+      "Inference Latency (ms)": 185.0,
+      "Parameters": "151.3 M"
+    },
+    {
+      "Model Architecture": "emo Residual Multi-Task Neural Head",
+      "Type": "Fine-Tuned Deep Neural Network",
+      "Top-1 Accuracy (%)": 98.8,
+      "Inference Latency (ms)": 1.38,
+      "Parameters": "358.4 K"
+    }
+  ],
+  "task_breakdown": {
+    "gender": {
+      "accuracy": 100.0,
+      "top3_accuracy": 100.0,
+      "macro_precision": 100.0,
+      "macro_recall": 100.0,
+      "macro_f1": 100.0,
+      "classes": [
+        "Menswear",
+        "Womenswear",
+        "Unisex"
+      ],
+      "confusion_matrix": [
+        [
+          18,
+          0,
+          0
+        ],
+        [
+          0,
+          15,
+          0
+        ],
+        [
+          0,
+          0,
+          27
+        ]
+      ]
+    },
+    "garment": {
+      "accuracy": 98.3,
+      "top3_accuracy": 100.0,
+      "macro_precision": 99.5,
+      "macro_recall": 97.9,
+      "macro_f1": 98.5,
+      "classes": [
+        "Casual T-Shirt / Top",
+        "Formal Button-Down Shirt",
+        "Tailored Blazer / Suit",
+        "Ethnic Kurta Set / Traditional",
+        "Hoodie / Sweatshirt",
+        "Leather / Moto Jacket",
+        "Dress / Gown",
+        "Denim Jeans / Trousers",
+        "Casual Shorts",
+        "Flared / Pencil Skirt",
+        "Footwear / Shoes",
+        "Handbag / Accessories"
+      ],
+      "confusion_matrix": [
+        [
+          15,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          5,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          6,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          6,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3
+        ]
+      ]
+    },
+    "formality": {
+      "accuracy": 98.3,
+      "top3_accuracy": 100.0,
+      "macro_precision": 99.4,
+      "macro_recall": 97.5,
+      "macro_f1": 98.4,
+      "classes": [
+        "Relaxed Streetwear / Casual",
+        "Smart Casual / Modern Office",
+        "Black Tie / High Formal",
+        "Ceremonial / Festive Heritage"
+      ],
+      "confusion_matrix": [
+        [
+          41,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          6,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          3
+        ]
+      ]
+    },
+    "texture": {
+      "accuracy": 98.3,
+      "top3_accuracy": 100.0,
+      "macro_precision": 99.2,
+      "macro_recall": 98.2,
+      "macro_f1": 98.6,
+      "classes": [
+        "Soft Breathable Cotton Jersey",
+        "Crisp Poplin / Structured Cotton",
+        "Heavy Structured Wool / Denim",
+        "Flowing Silk / Satin / Chiffon",
+        "Supple Leather / Moto Suede"
+      ],
+      "confusion_matrix": [
+        [
+          24,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          10,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          9,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          10
+        ]
+      ]
+    }
+  }
+}
